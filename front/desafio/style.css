@@ -1,0 +1,118 @@
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.nav {
+  background-color: rgb(97, 70, 219);
+  display: flex;
+  padding-left: 5px;
+}
+a {
+  text-decoration: none;
+  color: #000;
+  padding: 30px;
+}
+.nav {
+  color: #000;
+  font-weight: bold;
+  text-align: left;
+}
+
+.purplebutton {
+  background-color: rgb(97, 70, 219);
+}
+
+button {
+  border: 0;
+  padding: 15px;
+  margin-top: 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #cacaca;
+}
+
+input {
+  padding: 10px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #f1ebeb;
+  font-weight: bold;
+  width: 30%;
+}
+.col6 {
+  width: 45.2%;
+}
+select {
+  width: 91%;
+  display: flex;
+  padding: 10px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #f1ebeb;
+  font-weight: bold;
+  color: #707070;
+}
+
+.add {
+  width: 91%;
+}
+
+table {
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+}
+.main {
+  display: flex;
+  margin: 10px;
+}
+
+td,
+th {
+  text-align: center;
+  border: 1px solid #cacaca;
+  padding: 10px;
+}
+
+th {
+  color: #707070;
+}
+
+.col-6 {
+  width: 50%;
+}
+
+.col-11 {
+  width: 100%;
+  margin-top: 50px;
+  margin-left: 5px;
+}
+
+.tdbutton {
+  border-top: 0;
+  border-bottom: 0;
+  border-right: 0;
+}
+
+.detail {
+
+    justify-content: center;
+  margin-top: 40px;
+}
+.canto {
+  display: flex;
+  justify-content: end;
+  width: 90%;
+}
+p{
+    padding: 20px;
+    color: #707070;
+}
+

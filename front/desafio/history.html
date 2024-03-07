@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>suite store</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="nav">
+      <h1>Suite Store</h1>
+      <nav class="nav">
+        <a href="home.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="categories.html">Categories</a>
+        <a href="history.html">History</a>
+      </nav>
+    </div>
+
+    <table class="tabela col-11" id="tbHistory">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Tax</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </body>
+</html>
+
+<script>
+  const readCompra = async () => {
+    const response = await fetch("http://localhost/routes/orders.php");
+    const data = await response.json();
+     console.log(data);
+    data.forEach((item) => {
+      createRow(item);
+    });
+    return data;
+  };
+
+  const createRow = (compra) => {
+    const tbHistory = document.querySelector("#tbHistory>tbody");
+    const newRow = document.createElement("tr");
+    
+    newRow.innerHTML = `
+        <td>${compra.code}</td>
+        <td>$${compra.tax}</td>
+        <td>$${compra.total}</td>
+        <td class="tdbutton">
+          <button type="button" id="view">
+            <a href="view.html?code=${compra.code}"">View</a>
+          </button>
+        </td>
+    `;
+    tbHistory.appendChild(newRow);
+  };
+  const updateTable = () => {
+    const dbCompra = readCompra();
+    //dbCompra.forEach(createRow);
+  };
+  updateTable();
+</script>

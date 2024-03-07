@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>suite store</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="nav">
+      <h1>Suite Store</h1>
+      <nav class="nav">
+        <a href="home.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="categories.html">Categories</a>
+        <a href="history.html">History</a>
+      </nav>
+    </div>
+    <div class="main">
+      <div class="col-11">
+        <table id="tbCompra">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Amount</th>
+              <th>Price</th>
+              <th>Tax</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  async function getItems() {
+    let code = window.location.search.split("=")[1];
+    const response = fetch(
+      `http://localhost/routes/orders.php?code=${code}`
+    ).then((res) => res.json());
+    const items = await response;
+    console.log(items);
+    items.forEach((item) => createRow(item));
+  }
+  getItems();
+
+  const createRow = (compra) => {
+    const tbCompra = document.querySelector("#tbCompra>tbody");
+    const newRow = document.createElement("tr");
+  
+    console.log(compra);
+    newRow.innerHTML = `
+          <td>${compra.name}</td>
+          <td>${compra.amount}</td>
+          <td>$${compra.price}</td>
+          <td>$${((compra.tax/100)*compra.price*compra.amount).toFixed(2)}</td>
+      `;
+    tbCompra.appendChild(newRow);
+  };
+</script>

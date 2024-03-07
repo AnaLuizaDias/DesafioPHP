@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>suite store</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="nav">
+      <h1>Suite Store</h1>
+      <nav class="nav">
+        <a href="home.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="categories.html">Categories</a>
+        <a href="history.html">History</a>
+      </nav>
+    </div>
+    <div class="main">
+      <div class="col-6">
+        <form id="form">
+          <input
+            name="name"
+            id="nameProd"
+            type="text"
+            placeholder="Product name"
+            class="col6 clearInput"
+            required
+          />
+          <input
+            name="amount"
+            id="amount"
+            type="number"
+            min="1"
+            placeholder="Amount"
+            class="col6 clearInput"
+            required
+          />
+          <input
+            name="price"
+            id="price"
+            type="number"
+            min="1"
+            placeholder="Unit Price"
+            class="col6 clearInput"
+            required
+          />
+          <select name="category" id="selectCategories"></select>
+          <input
+            onclick="createProduto()"
+            class="add purplebutton"
+            type="submit"
+            value="add product"
+          />
+        </form>
+        <!-- <button class="add purplebutton" id="save">Add Product</button> -->
+      </div>
+
+      <div class="col-6">
+        <table id="tbProduto">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Product</th>
+              <th>Amount</th>
+              <th>Unit price</th>
+              <th>Category</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    function filter(nome) {
+      return nome.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    // const getLocalStorage = () =>
+    //   JSON.parse(localStorage.getItem("db_produto")) ?? [];
+    // const setLocalStorage = (dbProduto) =>
+    //   localStorage.setItem("db_produto", JSON.stringify(dbProduto));
+
+    const productForm = document.getElementById("form");
+    //create
+    function createProduto() {
+      productForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const data = new FormData(productForm);
+        console.log(data)
+        try {
+          const res = await fetch("http://localhost/routes/products.php", {
+            method: "POST",
+            body: data,
+          }).then(async (res) => {
+            console.log(await res.text());
+            window.location.reload();
+          });
+        } catch (error) {
+          console.log("aaaaaa");
+        }
+      });
+    }
+
+    //read
+    const readProduto = async () => {
+      const response = await fetch("http://localhost/routes/products.php");
+      const data = await response.json();
+      return data;
+    };
+
+    //update
+    // const updateProduto = (index, produto) => {
+    //   const dbProduto = readProduto();
+    //   dbProduto[index] = produto;
+    //   setLocalStorage(dbProduto);
+    // };
+
+    //delete
+    const deleteProduto = async (id) => {
+      await fetch(`http://localhost/routes/products.php?id=${id}`, {
+        method: "DELETE",
+      }),
+        window.location.reload();
+    };
+
+    //INTERAÇÃO COM O LAYOUT
+
+    //validação dos campos requeridos
+    const isValidFields = () => {
+      return document.getElementById("form").reportValidity();
+    };
+
+    //limpa os inputs depois dos cadastros
+    const clearFields = () => {
+      const fields = document.querySelectorAll(".clearInput");
+      fields.forEach((field) => (field.value = ""));
+    };
+    function getTaxas() {
+      var taxa = JSON.parse(localStorage.getItem("db_categoria"));
+      //var selectCategories = document.getElementById('selectCategories')
+
+      taxa.forEach((taxa) => {
+        console.log(categoria.taxa);
+        //selectCategories.innerHTML +=
+        //`<option value="${categoria.nome}">${categoria.nome}</option>`
+      });
+    }
+    function caracteres() {
+      const inputElement = document.getElementById("nameProd");
+      const char = inputElement.value.trim();
+      const pattern = /^[a-zA-Z0-9\s]*$/;
+      if (!pattern.test(char)) {
+        return false;
+      }
+      return true;
+    }
+    //salva as produtos
+    // const saveProduto = () => {
+    //   if (isValidFields() && caracteres()) {
+    //     const produto = {
+    //       nome: document
+    //         .getElementById("nameProd")
+    //         .value.replace(/</g, "&lt")
+    //         .replace(/</g, "&lt"),
+    //       qtd: document
+    //         .getElementById("amount")
+    //         .value.replace(/</g, "&lt")
+    //         .replace(/</g, "&lt"),
+    //       preco: document
+    //         .getElementById("price")
+    //         .value.replace(/</g, "&lt")
+    //         .replace(/</g, "&lt"),
+    //       categoria: document
+    //         .getElementById("selectCategories")
+    //         .value.replace(/</g, "&lt")
+    //         .replace(/</g, "&lt"),
+    //       //taxa: document.getElementById("taxa").value,
+    //     };
+    //     createProduto(produto);
+    //     updateTable();
+    //     clearFields();
+    //   }
+    // };
+
+    //adiciona uma nova linha
+    const createRow = (product, index) => {
+      const newRow = document.createElement("tr");
+      newRow.innerHTML = `
+          <td>00${product.code}</td>
+          <td>${product.name}</td>
+          <td>${product.amount}</td>
+          <td>$${product.price}</td>
+          <td>${product.category}</td>
+          <td class="tdbutton">
+            <button type="button" onclick="deleteProduto(${product.code})">Delete</button>
+          </td>
+
+        `;
+      document.querySelector("#tbProduto>tbody").appendChild(newRow);
+    };
+
+    const clearTable = () => {
+      const rows = document.querySelectorAll("#tbProduto>tbody tr");
+      rows.forEach((row) => row.parentNode.removeChild(row));
+    };
+
+    //atualiza a tabela
+    const updateTable = async () => {
+      clearTable();
+      const dbProduto = await readProduto();
+      dbProduto.forEach((product, i) => {
+        createRow(product, i);
+      });
+    };
+    updateTable();
+
+    //apaga a produto
+    const deleteButton = (event) => {
+      if (event.target.type == "button") {
+        const [action, index] = event.target.id.split("-");
+        if (action == "delete") {
+          deleteProduto(index);
+          updateTable();
+        }
+      }
+    };
+
+    async function getCategories() {
+      // var categories = JSON.parse(localStorage.getItem('db_categoria'))
+      const response = await fetch("http://localhost/routes/categories.php");
+      const categories = await response.json();
+      // var selectCategories = document.getElementById('selectCategories')
+
+      categories.forEach((category) => {
+        selectCategories.innerHTML += `<option value="${category.code}">${category.name}</option>`;
+      });
+    }
+    getCategories();
+
+    //EVENTOS
+    // document.getElementById("save").addEventListener("click", saveProduto);
+    document.querySelector("#tbProduto>tbody");
+    document.addEventListener("click", deleteButton);
+  </script>
+</html>

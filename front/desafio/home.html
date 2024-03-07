@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>suite store</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="nav">
+      <h1>Suite Store</h1>
+      <nav class="nav">
+        <a href="home.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="categories.html">Categories</a>
+        <a href="history.html">History</a>
+      </nav>
+    </div>
+    <div class="main">
+      <div class="col-6">
+        <form id="form">
+          <select name="text" id="selectProducts"></select>
+          <input
+            id="amount"
+            type="number"
+            placeholder="Amount"
+            class="col6 clearInput"
+            min="1"
+          />
+          <input
+            readonly
+            id="tax"
+            type="text"
+            placeholder="Tax unit"
+            class="col6 clearInput"
+          />
+          <input
+            readonly
+            id="price"
+            type="text"
+            placeholder="Price"
+            class="col6 clearInput"
+            required
+          />
+        </form>
+        <button class="add purplebutton" id="save">Add Product</button>
+      </div>
+
+      <div class="col-6">
+        <table id="tbCompra">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Unit Price</th>
+              <th>Amount</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="canto">
+          <p>Tax: <span id="taxTotal"></span></p>
+          <p>Total: <span id="total"></span></p>
+        </div>
+        <div class="but">
+          <button id="cancel">Cancel</button>
+          <button class="purplebutton" id="finish">Finish</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  function filter(nome) {
+    return nome.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  let tempCar = [];
+
+  const showInput = async () => {
+    const selectedProduct = document.getElementById("selectProducts").value;
+
+    try {
+      const response = await fetch("http://localhost/routes/products.php");
+      const dbProduto = await response.json();
+
+      const product = dbProduto.find((p) => String(p.name) === selectedProduct);
+
+      if (product) {
+        const amount = parseFloat(document.getElementById("amount").value);
+        const tax_value = product.tax;
+        const price = product.price;
+
+        const totalTax = (tax_value * price * amount) / 100;
+        const totalPrice = price * amount;
+
+        document.getElementById("price").value = totalPrice.toFixed(2);
+        document.getElementById("tax").value = totalTax.toFixed(2);
+      }
+    } catch (error) {
+      //console.error("Erro ao obter produtos do PHP:", error);
+    }
+  };
+
+  async function getProducts() {
+    const response = await fetch("http://localhost/routes/products.php");
+    const products = await response.json();
+
+    return products;
+  }
+
+  async function renderSelectProducts() {
+    let products = await getProducts();
+    selectProducts.innerHTML = ``;
+    products.forEach((product) => {
+      selectProducts.innerHTML += `<option value="${product.name}">${product.name}</option>`;
+    });
+  }
+  renderSelectProducts();
+  // getProducts();
+
+  async function getCategories() {
+    const response = await fetch("http://localhost/routes/categories.php");
+    const categories = await response.json();
+    return categories;
+  }
+
+  document
+    .getElementById("selectProducts")
+    .addEventListener("change", showInput);
+  document.getElementById("amount").addEventListener("input", showInput);
+
+  //create
+  const createCompra = (compra) => {
+    tempCar.push(compra);
+  };
+
+  //read
+  //const readCompra = () => getLocalStorage();
+
+  function viewTotal() {
+    const totalCompra = document.getElementById("total");
+    const totalTax = document.getElementById("taxTotal");
+
+    let total = 0;
+    let tax = 0;
+
+    tempCar.forEach((compra) => {
+      total += parseFloat(compra.total);
+      tax += parseFloat(compra.tax);
+
+      console.log(compra.tax);
+    });
+
+    totalCompra.innerHTML = total.toFixed(2);
+    totalTax.innerHTML = tax.toFixed(2);
+  }
+  //update
+  const updateCompra = (index, compra) => {
+    tempCar[index] = compra;
+    viewTotal();
+  };
+
+  //delete
+  const deleteCompra = (index) => {
+    tempCar.splice(index, 1);
+    updateTable();
+  };
+
+  //INTERAÇÃO COM O LAYOUT
+
+  //validação dos campos requeridos
+  const isValidFields = () => {
+    return document.getElementById("form").reportValidity();
+  };
+
+  //limpa os inputs depois dos cadastros
+  const clearFields = () => {
+    const fields = document.querySelectorAll(".clearInput");
+    fields.forEach((field) => (field.value = ""));
+  };
+
+  const taxs = JSON.parse(localStorage.getItem("db_categoria"));
+  taxs.forEach((categoria) => {
+    console.log(categoria.taxa);
+  });
+
+  //salva os produtos
+  const saveCompra = async () => {
+    if (isValidFields()) {
+      const unitPrice = parseFloat(document.getElementById("price").value);
+      const taxValue = parseFloat(document.getElementById("tax").value);
+      const category = await getCategories();
+      const prices = await getProducts();
+      const valorDesejado = document.getElementById("selectProducts").value;
+      const qtd = parseFloat(document.getElementById("amount").value);
+      const produtoEncontrado = prices.find(
+        (produto) => produto.name == valorDesejado
+      );
+      const categoriaEncontrada = category.find(
+        (cate) => cate.name == produtoEncontrado.category
+      );
+      const precoEncontrado = category.find(
+        (cate) => cate.name == produtoEncontrado.produto
+      );
+
+      const unitprice = parseFloat(produtoEncontrado.price) * qtd;
+      unitPrice.value = unitprice;
+      const taxaconv = parseFloat(categoriaEncontrada.tax);
+      const percent = parseFloat(((taxaconv / 100) * unitprice).toFixed(2));
+      taxValue.value = percent;
+      const totalProd = (unitprice + percent).toFixed(2);
+
+      if (qtd <= produtoEncontrado.amount) {
+        const compra = {
+          name: valorDesejado,
+          code: produtoEncontrado.code,
+          amount: document.getElementById("amount").value,
+          price: parseFloat(document.getElementById("price").value),
+          tax: parseFloat(percent),
+          total: parseFloat(totalProd),
+        };
+        let exist = tempCar.find((obj) => obj.name == compra.name);
+        console.log(exist);
+        if (exist) {
+          exist.amount =
+            parseInt(exist.amount) +
+            parseInt(document.getElementById("amount").value);
+          exist.tax += parseFloat(percent);
+          exist.total += parseFloat(totalProd);
+
+          createRow(exist, tempCar.length);
+          viewTotal();
+          //clearFields();
+          updateTable();
+          // updateCompra();
+        } else {
+          tempCar.push(compra);
+          createRow(compra, tempCar.length);
+          viewTotal();
+          //clearFields();
+        }
+      } else {
+        alert(
+          `Estoque insuficiente! Quantidade disponível no estoque: ${produtoEncontrado.amount} unidades`
+        );
+      }
+    }
+    console.log(tempCar);
+  };
+
+  //adiciona uma nova linha
+  const createRow = (compra, index) => {
+    const newRow = document.createElement("tr");
+
+    newRow.innerHTML = `
+      <td>${compra.name}</td>
+      <td>$${compra.price}</td>
+      <td>${compra.amount}</td>
+      <td>$${compra.total}</td>
+      <td class="tdbutton">
+        <button type="button" id="delete-${index}">Delete</button>
+      </td>
+    `;
+    document.querySelector("#tbCompra>tbody").appendChild(newRow);
+    console.log(compra);
+  };
+
+  const clearTable = () => {
+    const rows = document.querySelectorAll("#tbCompra>tbody tr");
+    rows.forEach((row) => {
+      row.parentNode.removeChild(row);
+    });
+  };
+
+  //atualiza a tabela
+  const updateTable = () => {
+    clearTable();
+    tempCar.forEach((obj, i) => {
+      createRow(obj, i);
+    });
+    viewTotal();
+  };
+  updateTable();
+
+  //apaga a produto
+  const deleteButton = (event) => {
+    if (event.target.type == "button") {
+      const [action, index] = event.target.id.split("-");
+      if (action == "delete") {
+        deleteCompra(index);
+        updateTable();
+      }
+    }
+  };
+  function cancelButton() {
+    tempCar = [];
+    updateTable();
+  }
+
+  // const atualizaEstoque = () => {
+  //   const products = JSON.parse(localStorage.getItem("db_produto"));
+  //   let erro = false;
+  //   console.log(tempCar);
+  //   tempCar.forEach((produtoCarrinho) => {
+  //     produtoNaStorage = products.find(
+  //       (obj) => obj.name == produtoCarrinho.name
+  //     );
+  //     if (produtoCarrinho.amount > produtoNaStorage.amount) {
+  //       alert("nao foi possivel comprar o produto: estoque insuficiente");
+  //       erro = true;
+  //     }
+  //     console.log(produtoNaStorage);
+  //     if (!erro) {
+  //       products.map((p) => {
+  //         if (p.name == produtoCarrinho.name) {
+  //           p.amount -= produtoCarrinho.amount;
+  //         }
+  //         return p;
+  //       });
+  //       localStorage.setItem("db_produto", JSON.stringify(products));
+  //     }
+  //   });
+  //   return erro;
+  // };
+
+  async function finishCompra() {
+    if (tempCar.length > 0) {
+      let formatedCart = tempCar.map((item) => {
+        return { code: item.code, amount: item.amount };
+      });
+      const response = await fetch("http://localhost/routes/orders.php", {
+        method: "post",
+        body: JSON.stringify(formatedCart),
+      }).then((res) => res.json());
+    }
+    tempCar = [];
+    updateTable();
+  }
+
+  //EVENTOS
+  document.getElementById("save").addEventListener("click", saveCompra);
+  document.getElementById("finish").addEventListener("click", finishCompra);
+  document.querySelector("#tbCompra>tbody");
+  document.addEventListener("click", deleteButton);
+  document.getElementById("cancel").addEventListener("click", cancelButton);
+</script>

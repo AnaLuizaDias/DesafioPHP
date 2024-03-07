@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>suite store</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="nav">
+      <h1>Suite Store</h1>
+      <nav class="nav">
+        <a href="home.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="categories.html">Categories</a>
+        <a href="history.html">History</a>
+      </nav>
+    </div>
+    <div class="main">
+      <div class="col-6">
+        <form id="form">
+          <input
+            name="name"
+            id="categoryName"
+            type="text"
+            placeholder="Category name"
+            class="col6 clearInput"
+            required
+          />
+          <input
+            name="tax"
+            id="tax"
+            type="number"
+            placeholder="Tax"
+            class="col6 clearInput"
+            min="1"
+            required
+          />
+          <!-- <button class="add purplebutton" id="">Add Category</button> -->
+          <input
+            onclick="createCategoria()"
+            class="add purplebutton"
+            type="submit"
+            value="add category"
+          />
+        </form>
+      </div>
+
+      <div class="col-6">
+        <table id="tbCategoria">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Category</th>
+              <th>Tax</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    // const getLocalStorage = () =>
+    //   JSON.parse(localStorage.getItem("db_categoria")) ?? [];
+    // const setLocalStorage = (dbCategoria) =>
+    //   localStorage.setItem("db_categoria", JSON.stringify(dbCategoria));
+    //read
+    const readCategoria = async () => {
+      const response = await fetch("http://localhost/routes/categories.php");
+      const data = await response.json();
+      return data;
+    };
+    const categoryForm = document.getElementById("form");
+    //create
+    function createCategoria() {
+      categoryForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const data = new FormData(categoryForm);
+        try {
+          const res = await fetch(
+            "http://localhost/routes/categories.php",
+            {
+              method: "POST",
+              body: data,
+            },
+            window.location.reload()
+          );
+        } catch (error) {
+          console.log("não foi possível adicionar");
+        }
+      });
+    }
+
+    // const readCategoria = () => getLocalStorage();
+
+    //update
+    // const updateCategoria = (index, categoria) => {
+    //   const dbCategoria = readCategoria();
+    //   dbCategoria[index] = categoria;
+    //   setLocalStorage(dbCategoria);
+    // };
+
+    //delete
+    const deleteCategoria = async (id) => {
+      await fetch(`http://localhost/routes/categories.php?id=${id}`, {
+        method: "DELETE",
+      }),
+        window.location.reload();
+    };
+
+    //INTERAÇÃO COM O LAYOUT
+
+    //validação dos campos requeridos
+    // const isValidFields = () => {
+    //   return document.getElementById("form").reportValidity();
+    // };
+
+    //limpa os inputs depois dos cadastros
+    const clearFields = () => {
+      const fields = document.querySelectorAll(".clearInput");
+      fields.forEach((field) => (field.value = ""));
+    };
+
+    // //salva as categorias
+    // const saveCategoria = () => {
+    //   if (checkChar()) {
+    //     const categoria = {
+    //       nome: document
+    //         .getElementById("categoryName")
+    //         .value.replace(/</g, "&lt;")
+    //         .replace(/>/g, "&gt;"),
+    //       taxa: document
+    //         .getElementById("tax")
+    //         .value.replace(/</g, "&lt;")
+    //         .replace(/>/g, "&gt;"),
+    //     };
+    //     createCategoria(category);
+    //     updateTable();
+    //     clearFields();
+    //   }
+    // };
+
+    function filter(nome) {
+      return nome.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function checkChar() {
+      const inputElement = document.getElementById("categoryName");
+      const char = inputElement.value.trim();
+
+      const pattern = /^[a-zA-Z0-9\s]*$/;
+
+      if (!pattern.test(char)) {
+        return false;
+      }
+
+      return true;
+    }
+
+    //adiciona uma nova linha
+    const createRow = (category, index) => {
+      const newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td>00${category.code}</td>
+        <td>${category.name}</td>
+        <td>${category.tax}%</td>
+        <td class="tdbutton">
+            <button type="button" onclick="deleteCategoria(${category.code})">Delete</button>
+        </td>
+        
+      `;
+      document.querySelector("#tbCategoria>tbody").appendChild(newRow);
+    };
+
+    const clearTable = () => {
+      const rows = document.querySelectorAll("#tbCategoria>tbody tr");
+      rows.forEach((row) => row.parentNode.removeChild(row));
+    };
+
+    //atualiza a tabela
+    const updateTable = async () => {
+      clearTable();
+      const dbCategoria = await readCategoria();
+      dbCategoria.forEach((category, index) => {
+        createRow(category, index);
+      });
+    };
+    updateTable();
+
+    //EVENTOS
+    // document.getElementById("save").addEventListener("click", saveCategoria);
+    document.querySelector("#tbCategoria>tbody");
+    // .addEventListener("click", deleteButton);
+  </script>
+</html>
