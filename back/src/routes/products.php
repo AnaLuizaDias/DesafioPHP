@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo $result;
 }
 
-//Get
+// Get
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $data = readProducts();
     echo json_encode($data);

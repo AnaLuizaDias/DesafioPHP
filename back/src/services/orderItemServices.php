@@ -58,6 +58,7 @@ function itemEstoque(int $product_code)
 }
 function atualizaEstoque(int $product_code, int $amount)
 {
+    
     $read = itemEstoque($product_code);
     $newAmount = $read['amount'] - $amount;
     $order_item = myPDO->query("UPDATE products set amount = $newAmount where code = {$product_code}");

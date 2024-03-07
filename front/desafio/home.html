@@ -148,7 +148,7 @@
       total += parseFloat(compra.total);
       tax += parseFloat(compra.tax);
 
-      console.log(compra.tax);
+      // console.log(compra.tax);
     });
 
     totalCompra.innerHTML = total.toFixed(2);
@@ -186,6 +186,7 @@
 
   //salva os produtos
   const saveCompra = async () => {
+    let erro = false
     if (isValidFields()) {
       const unitPrice = parseFloat(document.getElementById("price").value);
       const taxValue = parseFloat(document.getElementById("tax").value);
@@ -220,7 +221,7 @@
           total: parseFloat(totalProd),
         };
         let exist = tempCar.find((obj) => obj.name == compra.name);
-        console.log(exist);
+        // console.log(exist);
         if (exist) {
           exist.amount =
             parseInt(exist.amount) +
@@ -233,6 +234,17 @@
           //clearFields();
           updateTable();
           // updateCompra();
+
+          
+          if (exist.amount>produtoEncontrado.amount){
+            alert ("não foi possivel adicionar o produto: estoque insuficiente")
+            exist.amount =
+            parseInt(exist.amount) -
+            parseInt(document.getElementById("amount").value);
+          exist.tax -= parseFloat(percent);
+          exist.total -= parseFloat(totalProd);
+          updateTable()
+          }
         } else {
           tempCar.push(compra);
           createRow(compra, tempCar.length);
@@ -243,9 +255,10 @@
         alert(
           `Estoque insuficiente! Quantidade disponível no estoque: ${produtoEncontrado.amount} unidades`
         );
+        
       }
     }
-    console.log(tempCar);
+    return erro
   };
 
   //adiciona uma nova linha
@@ -262,7 +275,7 @@
       </td>
     `;
     document.querySelector("#tbCompra>tbody").appendChild(newRow);
-    console.log(compra);
+    // console.log(compra);
   };
 
   const clearTable = () => {

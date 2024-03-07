@@ -19,6 +19,7 @@ function readProducts(){
     // $readAllProducts = myPDO->query("SELECT * FROM products");
     // $data = $readAllProducts->fetchAll(PDO::FETCH_ASSOC);
     // return $data;
+    
  
  
     $readAllProducts = myPDO->query("SELECT
@@ -38,4 +39,3 @@ function readProducts(){
     $data = $readAllProducts->fetchAll(PDO::FETCH_ASSOC);
     return $data;
 }
-?>
