@@ -42,8 +42,8 @@ Para instalar dependencias no react, você pode usar o script install.sh ou inst
 O script install.sh irá instalar a dependencia normalmente com npm install
 
 O script install_dev irá instalar a dependencia de dev
-
-Para executar qualquer um deles, você deve executar na raiz do projeto o seguinte comando ``bash ./scripts/install.sh`` seguido da dependencia que você deseja instalar
+bash ./scripts/install.sh
+Para executar qualquer um deles, você deve executar na raiz do projeto o seguinte comando ```` seguido da dependencia que você deseja instalar
 
 !!!!ATENÇÃO!!!!!
 
