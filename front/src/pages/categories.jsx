@@ -1,47 +1,54 @@
-const Categories = () => {
-    return (
-        <div class="main">
-      <div class="col-6">
-        <form id="form">
-          <input
-            name="name"
-            id="categoryName"
-            type="text"
-            placeholder="Category name"
-            class="col6 clearInput"
-            required
-          />
-          <input
-            name="tax"
-            id="tax"
-            type="number"
-            placeholder="Tax"
-            class="col6 clearInput"
-            min="1"
-            required
-          />
-          <input
-            class="add purplebutton"
-            type="submit"
-            value="add category"
-          />
-        </form>
-      </div>
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Table from "react-bootstrap/Table";
 
-      <div class="col-6">
-        <table id="tbCategoria">
+const Categories = () => {
+  return (
+    <>
+      <div className="conteiner col-12">
+        <div className="col-5">
+        <Form>
+          <Form.Group className="mb-3" >
+            <Form.Control type="text" placeholder="Category name" />
+          </Form.Group>
+
+          <Form.Group className="mb-3" >
+            <Form.Control type="number" min="1" placeholder="Tax" />
+          </Form.Group>
+
+          <Button variant="dark" className="mt-4 purple" type="submit">
+            Submit
+          </Button>
+        </Form>
+        </div>
+
+        <div className="col-5">
+        <Table responsive="sm">
           <thead>
             <tr>
-              <th>Code</th>
-              <th>Category</th>
+              <th>Category Name</th>
               <th>Tax</th>
             </tr>
           </thead>
-          <tbody></tbody>
-        </table>
+          <tbody>
+            <tr>
+              <td>Category Name</td>
+              <td>10%</td>
+            </tr>
+            <tr>
+              <td>Category Name</td>
+              <td>10%</td>
+            </tr>
+            <tr>
+              <td>Category Name</td>
+              <td>10%</td>
+            </tr>
+          </tbody>
+        </Table>
+        </div>
       </div>
-    </div>
-    );
-  };
-  
-  export default Categories;
+    </>
+  );
+};
+
+export default Categories;

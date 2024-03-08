@@ -5,6 +5,7 @@ import Home from "./pages/home";
 import Categories from "./pages/categories";
 import Products from "./pages/products";
 import History from "./pages/history";
+import "./index.css"
 
 export default function App() {
   return (
