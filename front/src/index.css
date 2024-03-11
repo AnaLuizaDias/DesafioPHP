@@ -30,6 +30,11 @@
 .gbt{
   background-color: rgba(0, 0, 0, 0.400);
   color: #ffff;
+  border: 0px;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 5px;
 }
 
 
