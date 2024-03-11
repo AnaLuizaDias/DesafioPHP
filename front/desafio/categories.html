@@ -62,10 +62,6 @@
   </body>
 
   <script>
-    // const getLocalStorage = () =>
-    //   JSON.parse(localStorage.getItem("db_categoria")) ?? [];
-    // const setLocalStorage = (dbCategoria) =>
-    //   localStorage.setItem("db_categoria", JSON.stringify(dbCategoria));
     //read
     const readCategoria = async () => {
       const response = await fetch("http://localhost/routes/categories.php");
@@ -93,15 +89,7 @@
       });
     }
 
-    // const readCategoria = () => getLocalStorage();
-
-    //update
-    // const updateCategoria = (index, categoria) => {
-    //   const dbCategoria = readCategoria();
-    //   dbCategoria[index] = categoria;
-    //   setLocalStorage(dbCategoria);
-    // };
-
+   
     //delete
     const deleteCategoria = async (id) => {
       await fetch(`http://localhost/routes/categories.php?id=${id}`, {
@@ -112,35 +100,12 @@
 
     //INTERAÇÃO COM O LAYOUT
 
-    //validação dos campos requeridos
-    // const isValidFields = () => {
-    //   return document.getElementById("form").reportValidity();
-    // };
 
     //limpa os inputs depois dos cadastros
     const clearFields = () => {
       const fields = document.querySelectorAll(".clearInput");
       fields.forEach((field) => (field.value = ""));
     };
-
-    // //salva as categorias
-    // const saveCategoria = () => {
-    //   if (checkChar()) {
-    //     const categoria = {
-    //       nome: document
-    //         .getElementById("categoryName")
-    //         .value.replace(/</g, "&lt;")
-    //         .replace(/>/g, "&gt;"),
-    //       taxa: document
-    //         .getElementById("tax")
-    //         .value.replace(/</g, "&lt;")
-    //         .replace(/>/g, "&gt;"),
-    //     };
-    //     createCategoria(category);
-    //     updateTable();
-    //     clearFields();
-    //   }
-    // };
 
     function filter(nome) {
       return nome.replace(/</g, "&lt;").replace(/>/g, "&gt;");

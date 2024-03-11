@@ -7,7 +7,7 @@ const Categories = () => {
     <>
       <div className="conteiner col-12">
         <div className="col-5">
-          <Form>
+          <Form id="form">
             <Form.Group className="mb-3">
               <Form.Control type="text" placeholder="Category name" />
             </Form.Group>
@@ -23,7 +23,7 @@ const Categories = () => {
         </div>
 
         <div className="col-5">
-          <Table responsive="sm">
+          <Table responsive="sm" id="tbCategoria">
             <thead>
               <tr>
                 <th>Code</th>
@@ -32,43 +32,44 @@ const Categories = () => {
                 <th></th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>001</td>
-                <td>Category Name</td>
-                <td>10%</td>
-                <td>
-                  <Button variant="light" type="submit" className="gbt ml">
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>002</td>
-                <td>Category Name</td>
-                <td>10%</td>
-                <td>
-                  <Button variant="light" type="submit" className="gbt ml">
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>003</td>
-                <td>Category Name</td>
-                <td>10%</td>
-                <td>
-                  <Button variant="light" type="submit" className="gbt ml">
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            </tbody>
+            <tbody></tbody>
           </Table>
         </div>
       </div>
     </>
   );
+};
+
+const readCategoria = async () => {
+  const response = await fetch("http://localhost/routes/categories.php");
+  const data = await response.json();
+  return data;
+};
+const clearTable = () => {
+  const rows = document.querySelectorAll("#tbCategoria>tbody tr");
+  rows.forEach((row) => row.parentNode.removeChild(row));
+};
+const updateTable = async () => {
+  clearTable();
+  const dbCategoria = await readCategoria();
+  dbCategoria.forEach((category, index) => {
+    createRow(category, index);
+  });
+};
+updateTable();
+
+const createRow = (category) => {
+  const newRow = document.createElement("tr");
+  newRow.innerHTML = `
+    <td>00${category.code}</td>
+    <td>${category.name}</td>
+    <td>${category.tax}%</td>
+    <td class="tdbutton">
+        <button type="button" onclick="deleteCategoria(${category.code})">Delete</button>
+    </td>
+    
+  `;
+  document.querySelector("#tbCategoria>tbody").appendChild(newRow);
 };
 
 export default Categories;
