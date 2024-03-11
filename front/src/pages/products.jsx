@@ -32,7 +32,7 @@ const Products = () => {
           </Form>
         </div>
         <div className="col-5">
-          <Table responsive="sm">
+          <Table responsive="sm" id="tbProduto">
             <thead>
               <tr>
                 <th>Code</th>
@@ -43,49 +43,44 @@ const Products = () => {
                 <th></th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Product Name</td>
-                <td>123</td>
-                <td>$10</td>
-                <td>Category Name</td>
-                <td>
-                  <Button variant="light" type="submit" className="gbt ml">
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Product Name</td>
-                <td>123</td>
-                <td>$10</td>
-                <td>Category Name</td>
-                <td>
-                  <Button variant="light" type="submit" className="gbt ml">
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Product Name</td>
-                <td>123</td>
-                <td>$10</td>
-                <td>Category Name</td>
-                <td>
-                  <Button variant="light" type="submit" className="gbt ml">
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            </tbody>
+            <tbody></tbody>
           </Table>
         </div>
       </div>
     </>
   );
+};
+const readProduto = async () => {
+  const response = await fetch("http://localhost/routes/products.php");
+  const data = await response.json();
+  return data;
+};
+const clearTable = () => {
+  const rows = document.querySelectorAll("#tbProduto>tbody tr");
+  rows.forEach((row) => row.parentNode.removeChild(row));
+};
+const updateTable = async () => {
+  clearTable();
+  const dbProduto = await readProduto();
+  dbProduto.forEach((product, index) => {
+    createRow(product, index);
+  });
+};
+updateTable();
+const createRow = (product, index) => {
+  const newRow = document.createElement("tr");
+  newRow.innerHTML = `
+      <td>00${product.code}</td>
+      <td>${product.name}</td>
+      <td>${product.amount}</td>
+      <td>$${product.price}</td>
+      <td>${product.category}</td>
+      <td class="tdbutton">
+        <button type="button" onclick="deleteProduto(${product.code})">Delete</button>
+      </td>
+
+    `;
+  document.querySelector("#tbProduto>tbody").appendChild(newRow);
 };
 
 export default Products;

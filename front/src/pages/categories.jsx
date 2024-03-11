@@ -2,6 +2,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
 
+
 const Categories = () => {
   return (
     <>
@@ -39,6 +40,7 @@ const Categories = () => {
     </>
   );
 };
+
 
 const readCategoria = async () => {
   const response = await fetch("http://localhost/routes/categories.php");

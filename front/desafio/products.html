@@ -77,11 +77,7 @@
     function filter(nome) {
       return nome.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
-    // const getLocalStorage = () =>
-    //   JSON.parse(localStorage.getItem("db_produto")) ?? [];
-    // const setLocalStorage = (dbProduto) =>
-    //   localStorage.setItem("db_produto", JSON.stringify(dbProduto));
-
+    
     const productForm = document.getElementById("form");
     //create
     function createProduto() {
@@ -110,12 +106,7 @@
       return data;
     };
 
-    //update
-    // const updateProduto = (index, produto) => {
-    //   const dbProduto = readProduto();
-    //   dbProduto[index] = produto;
-    //   setLocalStorage(dbProduto);
-    // };
+    
 
     //delete
     const deleteProduto = async (id) => {
@@ -143,8 +134,6 @@
 
       taxa.forEach((taxa) => {
         console.log(categoria.taxa);
-        //selectCategories.innerHTML +=
-        //`<option value="${categoria.nome}">${categoria.nome}</option>`
       });
     }
     function caracteres() {
@@ -156,33 +145,6 @@
       }
       return true;
     }
-    //salva as produtos
-    // const saveProduto = () => {
-    //   if (isValidFields() && caracteres()) {
-    //     const produto = {
-    //       nome: document
-    //         .getElementById("nameProd")
-    //         .value.replace(/</g, "&lt")
-    //         .replace(/</g, "&lt"),
-    //       qtd: document
-    //         .getElementById("amount")
-    //         .value.replace(/</g, "&lt")
-    //         .replace(/</g, "&lt"),
-    //       preco: document
-    //         .getElementById("price")
-    //         .value.replace(/</g, "&lt")
-    //         .replace(/</g, "&lt"),
-    //       categoria: document
-    //         .getElementById("selectCategories")
-    //         .value.replace(/</g, "&lt")
-    //         .replace(/</g, "&lt"),
-    //       //taxa: document.getElementById("taxa").value,
-    //     };
-    //     createProduto(produto);
-    //     updateTable();
-    //     clearFields();
-    //   }
-    // };
 
     //adiciona uma nova linha
     const createRow = (product, index) => {
@@ -228,10 +190,8 @@
     };
 
     async function getCategories() {
-      // var categories = JSON.parse(localStorage.getItem('db_categoria'))
       const response = await fetch("http://localhost/routes/categories.php");
       const categories = await response.json();
-      // var selectCategories = document.getElementById('selectCategories')
 
       categories.forEach((category) => {
         selectCategories.innerHTML += `<option value="${category.code}">${category.name}</option>`;
@@ -240,7 +200,6 @@
     getCategories();
 
     //EVENTOS
-    // document.getElementById("save").addEventListener("click", saveProduto);
     document.querySelector("#tbProduto>tbody");
     document.addEventListener("click", deleteButton);
   </script>
