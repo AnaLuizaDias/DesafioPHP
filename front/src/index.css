@@ -1,5 +1,6 @@
 .purple{
-  background-color:#4b3794
+  background-color:#4b3794;
+  color: #ffff;
 }
 .navrouter{
   color: #ffff;
@@ -19,6 +20,16 @@
 }
 .table{
   margin-left: 20%;
+}
+.select{
+  color: rgb(105, 105, 105);
+}
+.ml{
+  margin-left: 5%;
+}
+.gbt{
+  background-color: rgba(0, 0, 0, 0.400);
+  color: #ffff;
 }
 
 

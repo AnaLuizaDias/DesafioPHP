@@ -14,8 +14,8 @@ export default function App() {
         <Route path="/" element={<Header />}>
           <Route index element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/categories" element={<Categories />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/categories" element={<Categories />} />
           <Route path="/history" element={<History />} />
         </Route>
       </Routes>
