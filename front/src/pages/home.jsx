@@ -1,17 +1,28 @@
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
 
 const Home = () => {
+  const [values,setValues] = useState([]);
+  useEffect(() => {
+    fetch("http://localhost/routes/products.php")
+      .then((data) => data.json())
+      .then((val) => setValues(val));
+  }, []);
+
+
+
+
   return (
     <>
       <div className="conteiner col-12">
         <div className="col-5">
           <Form>
-            <Form.Select className="mb-3 select">
-              <option>Product</option>
-              <option>Default select</option>
-              <option>Default select</option>
+            <Form.Select className="mb-3 select" onChange={(e)=>setOptions(e.target.value)}>
+              {values.map((opts,i)=>(
+                <option key={i}>{opts.name}</option>
+              ))}
             </Form.Select>
 
             <Form.Group className="mb-3">

@@ -5,10 +5,14 @@ import Table from "react-bootstrap/Table";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [values, setValues] = useState([]);
   useEffect(() => {
+    fetch("http://localhost/routes/categories.php")
+      .then((data) => data.json())
+      .then((val) => setValues(val));
     updateTable();
-  });
-  
+  }, []);
+
   const readProduto = async () => {
     const response = await fetch("http://localhost/routes/products.php");
     const data = await response.json();
@@ -34,16 +38,34 @@ const Products = () => {
         <div className="col-5">
           <Form>
             <Form.Group className="mb-3">
-              <Form.Control type="email" placeholder="Product Name" />
+              <Form.Control id="name" type="text" placeholder="Product Name" />
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Control type="number" min="1" placeholder="Amount" />
+              <Form.Control
+                id="amount"
+                type="number"
+                min="1"
+                placeholder="Amount"
+              />
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Control type="number" min="1" placeholder="Price" />
+              <Form.Control
+                id="price"
+                type="number"
+                min="1"
+                placeholder="Price"
+              />
             </Form.Group>
+            <Form.Select
+              className="mb-3 select"
+              onChange={(e) => setOptions(e.target.value)}
+            >
+              {values.map((opts, i) => (
+                <option key={i}>{opts.name}</option>
+              ))}
+            </Form.Select>
 
             <Button variant="light" type="submit" className="mt-4 purple">
               Add Product
@@ -65,7 +87,7 @@ const Products = () => {
             </thead>
             <tbody>
               {products.map((product) => (
-                <tr>
+                <tr key={product.code}>
                   <td>{product.code}</td>
                   <td>{product.name}</td>
                   <td>{product.amount}</td>
@@ -91,69 +113,3 @@ const Products = () => {
 };
 
 export default Products;
-
-// import Button from "react-bootstrap/Button";
-// import Form from "react-bootstrap/Form";
-// import Table from "react-bootstrap/Table";
-
-// const Products = () => {
-//   return (
-//     <>
-//       <div className="conteiner col-12">
-//         <div className="col-5">
-
-//         </div>
-//         <div className="col-5">
-//           <Table responsive="sm" id="tbProduto">
-//             <thead>
-//               <tr>
-//                 <th>Code</th>
-//                 <th>Product</th>
-//                 <th>Amount</th>
-//                 <th>Unit Price</th>
-//                 <th>products</th>
-//                 <th></th>
-//               </tr>
-//             </thead>
-//             <tbody></tbody>
-//           </Table>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// const readProduto = async () => {
-//   const response = await fetch("http://localhost/routes/products.php");
-//   const data = await response.json();
-//   return data;
-// };
-// const clearTable = () => {
-//   const rows = document.querySelectorAll("#tbProduto>tbody tr");
-//   rows.forEach((row) => row.parentNode.removeChild(row));
-// };
-// const updateTable = async () => {
-//   clearTable();
-//   const dbProduto = await readProduto();
-//   dbProduto.forEach((product, index) => {
-//     createRow(product, index);
-//   });
-// };
-// updateTable();
-// const createRow = (product, index) => {
-//   const newRow = document.createElement("tr");
-//   newRow.innerHTML = `
-//       <td>00${product.code}</td>
-//       <td>${product.name}</td>
-//       <td>${product.amount}</td>
-//       <td>$${product.price}</td>
-//       <td>${product.products}</td>
-//       <td class="tdbutton">
-//         <button type="button" onclick="deleteProduto(${product.code})">Delete</button>
-//       </td>
-
-//     `;
-//   document.querySelector("#tbProduto>tbody").appendChild(newRow);
-// };
-
-// export default Products;

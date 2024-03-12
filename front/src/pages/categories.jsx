@@ -5,16 +5,33 @@ import Table from "react-bootstrap/Table";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
+  const [name, setName] = useState([]);
+  const [tax, setTax] = useState([]);
   useEffect(() => {
     updateTable();
   });
-  
+
   const readCategoria = async () => {
     const response = await fetch("http://localhost/routes/categories.php");
     const data = await response.json();
     return data;
   };
 
+  const createCategoria = (e) => {
+      e.preventDefault();
+      let data = new FormData();
+      data.append("name",name)
+      data.append("tax",tax)
+      fetch(
+          "http://localhost/routes/categories.php",
+          {
+            method: "POST",
+            body: data,
+          },
+          window.location.reload()
+        );
+      } 
+    
   const updateTable = async () => {
     const dbCategoria = await readCategoria();
     setCategories(dbCategoria);
@@ -32,13 +49,26 @@ const Categories = () => {
     <>
       <div className="conteiner col-12">
         <div className="col-5">
-          <Form>
+          <Form onSubmit={createCategoria}>
             <Form.Group className="mb-3">
-              <Form.Control type="text" placeholder="Category Name" />
+              <Form.Control
+                id="name"
+                type="text"
+                placeholder="Category Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Control type="number" min="1" placeholder="Tax" />
+              <Form.Control
+                id="tax"
+                type="number"
+                min="1"
+                placeholder="Tax"
+                value={tax}
+                onChange={(e) => setTax(e.target.value)}
+              />
             </Form.Group>
 
             <Button variant="light" type="submit" className="mt-4 purple">
@@ -59,7 +89,7 @@ const Categories = () => {
             </thead>
             <tbody>
               {categories.map((category) => (
-                <tr>
+                <tr key={category.code}>
                   <td>{category.code}</td>
                   <td>{category.name}</td>
                   <td>{category.tax}%</td>
