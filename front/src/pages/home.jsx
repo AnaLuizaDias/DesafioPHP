@@ -113,18 +113,6 @@ const Home = () => {
     setTempCart(newtempCart);
   };
 
-  // async function finishCompra() {
-  //   if (tempCart.length > 0) {
-  //     let formatedCart = tempCart.map((item) => {
-  //       return { code: item.code, amount: item.amount };
-  //     });
-  //     const response = await fetch("http://localhost/routes/orders.php", {
-  //       method: "post",
-  //       body: JSON.stringify(formatedCart),
-  //     }).then((res) => res.json());
-  //   }
-  // }
-
   return (
     <>
       <div className="conteiner col-12">
