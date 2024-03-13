@@ -104,7 +104,6 @@
   async function getProducts() {
     const response = await fetch("http://localhost/routes/products.php");
     const products = await response.json();
-
     return products;
   }
 
@@ -134,9 +133,6 @@
     tempCar.push(compra);
   };
 
-  //read
-  //const readCompra = () => getLocalStorage();
-
   function viewTotal() {
     const totalCompra = document.getElementById("total");
     const totalTax = document.getElementById("taxTotal");
@@ -147,8 +143,6 @@
     tempCar.forEach((compra) => {
       total += parseFloat(compra.total);
       tax += parseFloat(compra.tax);
-
-      // console.log(compra.tax);
     });
 
     totalCompra.innerHTML = total.toFixed(2);
@@ -221,7 +215,6 @@
           total: parseFloat(totalProd),
         };
         let exist = tempCar.find((obj) => obj.name == compra.name);
-        // console.log(exist);
         if (exist) {
           exist.amount =
             parseInt(exist.amount) +
@@ -231,9 +224,7 @@
 
           createRow(exist, tempCar.length);
           viewTotal();
-          //clearFields();
           updateTable();
-          // updateCompra();
 
           
           if (exist.amount>produtoEncontrado.amount){
@@ -275,7 +266,6 @@
       </td>
     `;
     document.querySelector("#tbCompra>tbody").appendChild(newRow);
-    // console.log(compra);
   };
 
   const clearTable = () => {
@@ -309,32 +299,6 @@
     tempCar = [];
     updateTable();
   }
-
-  // const atualizaEstoque = () => {
-  //   const products = JSON.parse(localStorage.getItem("db_produto"));
-  //   let erro = false;
-  //   console.log(tempCar);
-  //   tempCar.forEach((produtoCarrinho) => {
-  //     produtoNaStorage = products.find(
-  //       (obj) => obj.name == produtoCarrinho.name
-  //     );
-  //     if (produtoCarrinho.amount > produtoNaStorage.amount) {
-  //       alert("nao foi possivel comprar o produto: estoque insuficiente");
-  //       erro = true;
-  //     }
-  //     console.log(produtoNaStorage);
-  //     if (!erro) {
-  //       products.map((p) => {
-  //         if (p.name == produtoCarrinho.name) {
-  //           p.amount -= produtoCarrinho.amount;
-  //         }
-  //         return p;
-  //       });
-  //       localStorage.setItem("db_produto", JSON.stringify(products));
-  //     }
-  //   });
-  //   return erro;
-  // };
 
   async function finishCompra() {
     if (tempCar.length > 0) {

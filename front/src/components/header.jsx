@@ -10,7 +10,7 @@ const header = () => {
     <>
       <Navbar className="purple mb-4" data-bs-theme="dark">
       <Container>
-        <Link className="navrouter" id="suite" to="/home">Suite Store</Link>
+        <Link className="navrouter" id="suite" to="/">Suite Store</Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto ">

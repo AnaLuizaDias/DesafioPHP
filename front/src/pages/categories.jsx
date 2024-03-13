@@ -2,41 +2,38 @@ import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
+import axios from "axios";
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState([]);
   const [tax, setTax] = useState([]);
   useEffect(() => {
-    updateTable();
-  });
+    readCategoria();
+  },[]);
 
   const readCategoria = async () => {
-    const response = await fetch("http://localhost/routes/categories.php");
-    const data = await response.json();
-    return data;
+    try{
+      const response = await axios.get("http://localhost/routes/categories.php");
+      const data = response.data;
+      setCategories(data);
+    }catch (error){
+      console.error(error);
+    }
   };
 
-  const createCategoria = (e) => {
-      e.preventDefault();
+  const createCategoria = () => {
       let data = new FormData();
       data.append("name",name)
       data.append("tax",tax)
       fetch(
-          "http://localhost/routes/categories.php",
-          {
+          "http://localhost/routes/categories.php", {
             method: "POST",
             body: data,
-          },
-          window.location.reload()
-        );
+          }).then(readCategoria());
       } 
     
-  const updateTable = async () => {
-    const dbCategoria = await readCategoria();
-    setCategories(dbCategoria);
-  };
-  updateTable();
+  
 
   const deleteCategoria = async (id) => {
     await fetch(`http://localhost/routes/categories.php?id=${id}`, {
@@ -113,69 +110,3 @@ const Categories = () => {
 };
 
 export default Categories;
-
-// import Button from "react-bootstrap/Button";
-// import Form from "react-bootstrap/Form";
-// import Table from "react-bootstrap/Table";
-
-// const categorys = () => {
-//   return (
-//     <>
-//       <div className="conteiner col-12">
-//         <div className="col-5">
-
-//         </div>
-//         <div className="col-5">
-//           <Table responsive="sm" id="tbProduto">
-//             <thead>
-//               <tr>
-//                 <th>Code</th>
-//                 <th>category</th>
-//                 <th>Amount</th>
-//                 <th>Unit Price</th>
-//                 <th>categorys</th>
-//                 <th></th>
-//               </tr>
-//             </thead>
-//             <tbody></tbody>
-//           </Table>
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// const readCategoria = async () => {
-//   const response = await fetch("http://localhost/routes/categorys.php");
-//   const data = await response.json();
-//   return data;
-// };
-// const clearTable = () => {
-//   const rows = document.querySelectorAll("#tbProduto>tbody tr");
-//   rows.forEach((row) => row.parentNode.removeChild(row));
-// };
-// const updateTable = async () => {
-//   clearTable();
-//   const dbCategoria = await readCategoria();
-//   dbCategoria.forEach((category, index) => {
-//     createRow(category, index);
-//   });
-// };
-// updateTable();
-// const createRow = (category, index) => {
-//   const newRow = document.createElement("tr");
-//   newRow.innerHTML = `
-//       <td>00${category.code}</td>
-//       <td>${category.name}</td>
-//       <td>${category.amount}</td>
-//       <td>$${category.price}</td>
-//       <td>${category.categorys}</td>
-//       <td class="tdbutton">
-//         <button type="button" onclick="deleteCategoria(${category.code})">Delete</button>
-//       </td>
-
-//     `;
-//   document.querySelector("#tbProduto>tbody").appendChild(newRow);
-// };
-
-// export default categorys;
