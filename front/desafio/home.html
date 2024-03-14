@@ -228,10 +228,10 @@
 
           
           if (exist.amount>produtoEncontrado.amount){
-            alert ("não foi possivel adicionar o produto: estoque insuficiente")
-            exist.amount =
-            parseInt(exist.amount) -
-            parseInt(document.getElementById("amount").value);
+          alert ("não foi possivel adicionar o produto: estoque insuficiente")
+          exist.amount =
+          parseInt(exist.amount) -
+          parseInt(document.getElementById("amount").value);
           exist.tax -= parseFloat(percent);
           exist.total -= parseFloat(totalProd);
           updateTable()
@@ -321,3 +321,5 @@
   document.addEventListener("click", deleteButton);
   document.getElementById("cancel").addEventListener("click", cancelButton);
 </script>
+
+

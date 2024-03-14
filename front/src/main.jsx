@@ -5,7 +5,9 @@ import Home from "./pages/home";
 import Categories from "./pages/categories";
 import Products from "./pages/products";
 import History from "./pages/history";
-import "./index.css"
+import Detail from "./pages/detail";
+
+import "./index.css";
 
 export default function App() {
   return (
@@ -17,11 +19,12 @@ export default function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/history" element={<History />} />
+          <Route path="/detail/:code" element={<Detail />} />
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<App />);

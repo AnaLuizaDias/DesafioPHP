@@ -10,30 +10,29 @@ const Categories = () => {
   const [tax, setTax] = useState([]);
   useEffect(() => {
     readCategoria();
-  },[]);
+  }, []);
 
   const readCategoria = async () => {
-    try{
-      const response = await axios.get("http://localhost/routes/categories.php");
+    try {
+      const response = await axios.get(
+        "http://localhost/routes/categories.php"
+      );
       const data = response.data;
       setCategories(data);
-    }catch (error){
+    } catch (error) {
       console.error(error);
     }
   };
 
   const createCategoria = () => {
-      let data = new FormData();
-      data.append("name",name)
-      data.append("tax",tax)
-      fetch(
-          "http://localhost/routes/categories.php", {
-            method: "POST",
-            body: data,
-          }).then(readCategoria());
-      } 
-    
-  
+    let data = new FormData();
+    data.append("name", name);
+    data.append("tax", tax);
+    fetch("http://localhost/routes/categories.php", {
+      method: "POST",
+      body: data,
+    }).then(readCategoria());
+  };
 
   const deleteCategoria = async (id) => {
     await fetch(`http://localhost/routes/categories.php?id=${id}`, {

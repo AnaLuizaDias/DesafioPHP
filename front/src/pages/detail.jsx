@@ -1,19 +1,22 @@
 import { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
-import { Link } from "react-router-dom";
-
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
-const History = () => {
+const Detail = () => {
   const [compras, setCompra] = useState([]);
+  const params = useParams();
 
   useEffect(() => {
     readCompra();
+    console.log(params.code);
   }, []);
 
   const readCompra = async () => {
     try {
-      const response = await axios.get("http://localhost/routes/orders.php");
+      const response = await axios.get(
+        `http://localhost/routes/orders.php?code=${params.code}`
+      );
       const data = response.data;
       setCompra(data);
     } catch (error) {
@@ -26,26 +29,19 @@ const History = () => {
       <Table responsive="sm">
         <thead>
           <tr>
-            <th>Code</th>
+            <th>Product</th>
+            <th>Amount</th>
+            <th>Price</th>
             <th>Tax</th>
-            <th>Total</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
           {compras.map((compra) => (
             <tr key={compra.code}>
-              <td>{compra.code}</td>
-              <td>${compra.tax}</td>
-              <td>${compra.total}</td>
-
-              <td>
-                <button type="button" className="gbt ml">
-                  <Link className="navrouter" to={`/detail/${compra.code}`}>
-                    View
-                  </Link>
-                </button>
-              </td>
+              <td>{compra.name}</td>
+              <td>{compra.amount}</td>
+              <td>${compra.price}</td>
+              <td>${((compra.tax/100)*compra.price*compra.amount).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>
@@ -54,4 +50,4 @@ const History = () => {
   );
 };
 
-export default History;
+export default Detail;
