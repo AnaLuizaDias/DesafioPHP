@@ -16,7 +16,6 @@
 }
 .conteiner{
   display: flex;
-  margin: 20px;
 }
 .table{
   margin-left: 20%;
@@ -38,39 +37,8 @@
 }
 
 .inputHome{
-  margin-left: 15%;
+  margin-left: 15%; 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .col-1 {width: 8.33%};
 .col-2 {width: 16.66%};
