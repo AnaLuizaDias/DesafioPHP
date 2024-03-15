@@ -107,13 +107,17 @@ const Home = () => {
       } else {
         setTempCart((prev) => [...prev, compra]);
       }
+    }else{
+      alert("estoque insuficiente")
     }
   };
 
+  
   function existItem() {
     let exist = tempCart.find((obj) => obj.name == selectProduct.name);
-    if (exist.amount < selectProduct.amount) {
-      console.log(priceTax);
+    let estAtual = ((selectProduct.amount - (exist.amount)) -1 )
+
+    if (estAtual >= 0 ) {
       if (exist) {
         exist.amount = parseInt(exist.amount) + parseInt(amount);
         const tax = parseFloat(priceTax.tax);
@@ -127,6 +131,8 @@ const Home = () => {
       } else {
         addToCart();
       }
+    }else{
+      alert("estoque insuficiente")
     }
   }
 
@@ -208,6 +214,7 @@ const Home = () => {
                 <th>Product</th>
                 <th>Unit Price</th>
                 <th>Amount</th>
+                <th>Tax</th>
                 <th>Total</th>
                 <th></th>
               </tr>
@@ -219,6 +226,7 @@ const Home = () => {
                   <td>{compra.name}</td>
                   <td>{compra.price}</td>
                   <td>{compra.amount}</td>
+                  <td>{compra.tax}</td>
                   <td>{compra.total}</td>
                   <td>
                     <button
