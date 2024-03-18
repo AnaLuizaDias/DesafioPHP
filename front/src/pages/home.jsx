@@ -1,7 +1,6 @@
-import HomeComp from "../components/home/homeComp"
+import HomeComp from "../components/home/homeComp";
 
 const Home = () => {
-  
   return (
     <>
       <HomeComp />

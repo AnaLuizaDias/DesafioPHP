@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import FormProducts from "../components/products/formProducts";
-import TableProducts from "../components/products/tableProducts";
+import FormProducts from "../components/Products/formProducts";
+import TableProducts from "../components/Products/tableProducts";
 
 
 const Products = () => {

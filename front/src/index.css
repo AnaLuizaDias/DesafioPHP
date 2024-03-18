@@ -26,6 +26,7 @@
 .ml{
   margin-left: 5%;
 }
+
 .gbt{
   background-color: rgba(0, 0, 0, 0.400);
   color: #ffff;
@@ -34,6 +35,9 @@
   padding-left: 10px;
   padding-right: 10px;
   border-radius: 5px;
+}
+.gbt:hover{
+  background-color: #4b3794;
 }
 
 .inputHome{

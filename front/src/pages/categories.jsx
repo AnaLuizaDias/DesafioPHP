@@ -1,5 +1,5 @@
-import FormCategories from "../components/categories/formCategories";
-import TableCategories from "../components/categories/tableCategories";
+import FormCategories from "../components/Categories/formCategories";
+import TableCategories from "../components/Categories/tableCategories";
 
 const Categories = () => {
   return (

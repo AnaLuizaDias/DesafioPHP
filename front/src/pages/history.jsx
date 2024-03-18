@@ -1,4 +1,4 @@
-import HistoryComp from "../components/history/historyComp"
+import HistoryComp from "../components/History/historyComp"
 
 const History =()=>{
   return (

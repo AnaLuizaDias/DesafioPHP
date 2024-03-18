@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
+import AddButton from "../Buttons/addButton";
+import CancelButton from "../Buttons/cancelButton";
+import DeleteButton from "../Buttons/deleteButton";
+import InputComp from "../Input/inputComp";
 
 const HomeComp = () => {
   const [values, setValues] = useState([]);
@@ -135,12 +138,6 @@ const HomeComp = () => {
     }
   }
 
-  function deleteCart() {
-    const response = window.confirm("deseja realmente cancelar a compra?");
-    if (response) {
-      window.location.reload();
-    }
-  }
   const deleteItem = async (id) => {
     const newtempCart = tempCart.filter((item) => item.code !== id);
     setTempCart(newtempCart);
@@ -154,7 +151,7 @@ const HomeComp = () => {
             <Form.Select
               id="selectProduct"
               value={selectProduct.name}
-              className="mb-3 select"
+              className="mb-3 select ml w-100"
               onChange={getProduct}
             >
               <option readOnly>Product</option>
@@ -165,44 +162,32 @@ const HomeComp = () => {
               ))}
             </Form.Select>
 
-            <Form.Group className="mb-3">
-              <Form.Control
-                value={amount}
-                type="number"
-                min="1"
-                placeholder="Amount"
-                onChange={getAmount}
-              />
-            </Form.Group>
+            <InputComp
+              className="mb-3 ml w-100"
+              value={amount}
+              type="number"
+              min="1"
+              placeholder="Amount"
+              onChange={getAmount}
+            />
 
-            <Form.Group className="mb-3">
-              <Form.Control
-                value={priceTax.tax}
-                type="number"
-                min="1"
-                placeholder="Tax"
-                readOnly
-              />
-            </Form.Group>
+            <InputComp
+              className="mb-3 ml w-100"
+              value={priceTax.tax}
+              type="number"
+              placeholder="Tax"
+              readOnly
+            />
 
-            <Form.Group className="mb-3">
-              <Form.Control
-                value={priceTax.price}
-                type="number"
-                min="1"
-                placeholder="Price"
-                readOnly
-              />
-            </Form.Group>
-
-            <Button
-              variant="light"
-              type="submit"
-              className="mt-4 purple"
-              onClick={() => existItem(selectProduct.code)}
-            >
-              Add Product
-            </Button>
+            <InputComp
+              className="mb-3 ml w-100"
+              value={priceTax.price}
+              type="number"
+              placeholder="Price"
+              readOnly
+            />
+        
+            <AddButton texto="Add Product" className="w-100" onClick={() => existItem(selectProduct.code)}/>
           </Form>
         </div>
 
@@ -228,13 +213,10 @@ const HomeComp = () => {
                   <td>{compra.tax}</td>
                   <td>{compra.total}</td>
                   <td>
-                    <button
-                      type="button"
+                    <DeleteButton
+                      texto="Delete"
                       onClick={() => deleteItem(compra.code)}
-                      className="gbt ml"
-                    >
-                      delete
-                    </button>
+                    />
                   </td>
                 </tr>
               ))}
@@ -242,34 +224,24 @@ const HomeComp = () => {
           </Table>
           <div className="inputHome col-6">
             <Form onSubmit={finishCompra}>
-              <Form.Group className="mb-3 mt-5 ml readonly">
-                <Form.Control
-                  type="number"
-                  placeholder="Tax"
-                  value={taxTotal.tax}
-                  readOnly
-                />
-              </Form.Group>
-              <Form.Group className="mb-3 ml mt-3 readonly">
-                <Form.Control
-                  type="text"
-                  placeholder="Total"
-                  value={taxTotal.total}
-                  readOnly
-                />
-              </Form.Group>
+              <InputComp
+              type="number"
+              placeholder="Tax"
+              value={taxTotal.tax}
+              readOnly
+              className="mb-3 mt-5 ml readonly"
+              />
 
-              <Button
-                variant="light"
-                type="button"
-                className="mt-4 gbt ml"
-                onClick={deleteCart}
-              >
-                Cancel
-              </Button>
-              <Button variant="light" type="submit" className="mt-4 ml purple">
-                Finish
-              </Button>
+              <InputComp
+              className="mb-3 ml mt-3 readonly"
+              type="text"
+              placeholder="Total"
+              value={taxTotal.total}
+              readOnly
+              />
+              
+              <CancelButton />
+              <AddButton texto="Finish" />
             </Form>
           </div>
         </div>

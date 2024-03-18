@@ -1,4 +1,4 @@
-import DetailComp from "../components/detail/detailComp";
+import DetailComp from "../components/Detail/detailComp";
 
 const Detail = () => {
   return (
